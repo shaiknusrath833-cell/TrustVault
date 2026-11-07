@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TrustVault Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body style="font-family:Arial; text-align:center;
+             background:#eaf0f8; padding:60px;">
+
+    <h1>Welcome to TrustVault!</h1>
+
+    <h2>Hello, {{ name }}!</h2>
+
+    <p>Your Role: <strong>{{ role }}</strong></p>
+
+    <h3>Your Secure Document Sharing Dashboard</h3>
+
+    <p>Your documents, your control.</p>
+
+    <hr>
+
+    <h2>Upload a Document</h2>
+
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+
+        <input type="file" name="file" required>
+
+        <br><br>
+
+        <button type="submit">Upload Document</button>
+
+    </form>
+
+    <hr>
+
+    <h2>My Uploaded Documents</h2>
+
+    {% if documents %}
+
+    <table border="1" cellpadding="10"
+           style="margin:auto; border-collapse:collapse;">
+
+        <tr>
+            <th>Document ID</th>
+            <th>Document Name</th>
+            <th>Uploaded Date</th>
+            <th>Action</th>
+        </tr>
+
+        {% for document in documents %}
+
+        <tr>
+            <td>{{ document[0] }}</td>
+            <td>{{ document[1] }}</td>
+            <td>{{ document[2] }}</td>
+
+            
+<td>
+    <a href="/view/{{ document[0] }}">
+        View Document
+    </a>
+
+    <hr>
+
+    <form action="/share" method="POST">
+
+        <input
+            type="hidden"
+            name="document_id"
+            value="{{ document[0] }}"
+        >
+
+        <input
+            type="email"
+            name="email"
+            placeholder="Recipient email"
+            required
+        >
+
+        <select name="permission" required>
+            <option value="read">Read Only</option>
+            <option value="edit">Read and Edit</option>
+        </select>
+
+        <button type="submit">
+            Share Document
+        </button>
+
+    </form>
+    
+    <hr>
+
+    <form action="/revoke" method="POST">
+
+        <input
+            type="hidden"
+            name="document_id"
+            value="{{ document[0] }}"
+        >
+
+        <input
+            type="email"
+            name="email"
+            placeholder="Recipient email to revoke"
+            required
+        >
+
+        <button type="submit">
+            Revoke Access
+        </button>
+
+    </form>
+
+</td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% else %}
+
+    <p>No documents uploaded yet.</p>
+
+    {% endif %}
+        <hr>
+
+    <h2>Shared With Me</h2>
+
+    {% if shared_documents %}
+
+    <table border="1" cellpadding="10"
+           style="margin:auto; border-collapse:collapse;">
+
+        <tr>
+            <th>Document ID</th>
+            <th>Document Name</th>
+            <th>Owner Name</th>
+            <th>Permission</th>
+            <th>Action</th>
+        </tr>
+
+        {% for document in shared_documents %}
+
+        <tr>
+            <td>{{ document[0] }}</td>
+            <td>{{ document[1] }}</td>
+            <td>{{ document[3] }}</td>
+            <td>{{ document[4] }}</td>
+            
+<td>
+    <a href="/view/{{ document[0] }}">
+        View Document
+    </a>
+
+    {% if document[4] == 'edit' %}
+
+    <hr>
+
+    <form action="/edit/{{ document[0] }}"
+          method="POST"
+          enctype="multipart/form-data">
+
+        <input type="file" name="file" required>
+
+        <button type="submit">
+            Update Document
+        </button>
+
+    </form>
+
+    {% endif %}
+</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% else %}
+
+    <p>No documents have been shared with you yet.</p>
+
+    {% endif %}
+
+    <br>
+
+    <a href="/admin">Admin Dashboard</a>
+
+    <br><br>
+
+    <a href="/logout">Logout</a>
+
+</body>
+</html>

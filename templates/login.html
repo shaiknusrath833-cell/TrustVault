@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TrustVault Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: Arial;
+            background: #eaf0f8;
+            text-align: center;
+            padding-top: 100px;
+        }
+        .login-box {
+            background: white;
+            width: 320px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px gray;
+        }
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px;
+        }
+        button {
+            background: #174ea6;
+            color: white;
+            padding: 10px 25px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-box">
+    <h1>TrustVault</h1>
+    <h3>Secure Document Sharing System</h3>
+
+    <form action="/login" method="POST">
+        <input type="email" name="email"
+               placeholder="Enter Email" required>
+
+        <input type="password" name="password"
+               placeholder="Enter Password" required>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <p>New user? <a href="/register">Create Account</a></p>
+    <p>Your documents, your control.</p>
+</div>
+
+</body>
+</html>
