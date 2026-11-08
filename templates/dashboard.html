@@ -23,6 +23,7 @@
     <h2>Upload a Document</h2>
 
     <form action="/upload" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
         <input type="file" name="file" required>
 
@@ -64,6 +65,7 @@
     <hr>
 
     <form action="/share" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
         <input
             type="hidden"
@@ -92,6 +94,7 @@
     <hr>
 
     <form action="/revoke" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
         <input
             type="hidden"
@@ -161,6 +164,7 @@
     <form action="/edit/{{ document[0] }}"
           method="POST"
           enctype="multipart/form-data">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
         <input type="file" name="file" required>
 

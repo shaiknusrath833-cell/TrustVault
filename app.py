@@ -9,14 +9,16 @@ from flask import (
 
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
-
+from flask_wtf.csrf import CSRFProtect
 app = Flask(__name__)
+csrf = CSRFProtect(app)
 app.secret_key = os.environ["TRUSTVAULT_SECRET_KEY"]
 app.config["UPLOAD_FOLDER"] = os.path.join(
     app.root_path, "uploads"
 )
 app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024
-
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 ALLOWED_EXTENSIONS = {
     "pdf", "doc", "docx", "txt", "png", "jpg", "jpeg"
 }
@@ -30,10 +32,13 @@ def allowed_file(filename):
         and filename.rsplit(".", 1)[1].lower()
         in ALLOWED_EXTENSIONS
     )
-
-
 def get_db():
-    return sqlite3.connect("trustvault.db")
+    conn = sqlite3.connect("trustvault.db")
+    conn.execute("PRAGMA foreign_keys = ON")
+    return conn
+
+
+
 def log_activity(conn, user_id, document_id, action, details=None):
     conn.execute(
         """
@@ -689,4 +694,4 @@ def logout():
 
 if __name__ == "__main__":
     init_db()
-    app.run(debug=True)
+    app.run(debug=False)

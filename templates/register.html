@@ -44,6 +44,7 @@
     <h3>Create Your Account</h3>
 
     <form action="/register" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <input type="text" name="name"
                placeholder="Full Name" required>
 
